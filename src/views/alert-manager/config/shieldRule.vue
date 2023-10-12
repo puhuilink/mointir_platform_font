@@ -35,7 +35,7 @@
             @change="sourceChange" />
         </a-form-model-item>
         <a-form-model-item
-          label="分派条件"
+          label="屏蔽规则"
           :rules="[{ required:true, type: 'array', validator:sourcePass, trigger: 'change' }]"
           prop="policy_source">
           <div style="">
@@ -172,8 +172,8 @@
       <template :slot="'levelUp'" slot-scope="text,record">
         {{ record.policy_account.length > 1 ? '是' : '否' }}
       </template>
-      <template :slot="'notify'" slot-scope="text,record">
-        {{ notifyContent(record.policy_account) }}
+      <template :slot="'content'" slot-scope="text,record">
+        {{ notifyContent(record) }}
       </template>
       <template :slot="'action'" slot-scope="text,record">
         <a-button @click="showModal(record)">查看</a-button>
@@ -213,12 +213,12 @@ const columns = [
   {
     title: '规则名称',
     align: 'center',
-    dataIndex: 'name'
+    dataIndex: 'policy_name'
   },
   {
     title: '关联告警源',
     align: 'center',
-    dataIndex: 'dataSource'
+    dataIndex: 'source_name'
   },
   {
     title: '规则内容',
@@ -615,22 +615,44 @@ export default {
         option.componentOptions.children[0].text.toLowerCase().indexOf(input.toLowerCase()) >= 0
       )
     },
-    notifyContent (arr) {
+    notifyContent (record) {
       try {
         let str = ''
-        arr.forEach((a, index) => {
-          if (index === 0) {
-            if (a.account_type === '0') {
-              str += '分派组:' + this.group.find(g => g.value === a.group_id).label
+        record.policy_source.forEach(source => {
+          let length = 0
+          const relation = this.options.find(o => o.value === source.group_relation).label
+          source.group_condition.forEach(c => {
+            console.log(this.conditions[0].find(c0 => c0.value === c.condition_name))
+            console.log(this.conditions[0])
+            console.log(this.conditions[1].find(c0 => c0.value === c.condition_symbol))
+            console.log(this.conditions[1])
+            str += this.conditions[0].find(c0 => c0.value === c.condition_name).label +
+              this.conditions[1].find(c1 => c1.value === c.condition_symbol).label
+            const arr = c.condition_value.split(',')
+            if (arr.length > 0) {
+              let valueStr = ''
+              let valueLength = 0
+              arr.forEach(a => {
+                valueStr += this.conditions[2].find(c2 => c2.value === a).label
+                valueLength++
+                if (valueLength < arr.length) {
+                  valueStr += ','
+                }
+              })
+              str += '(' + valueStr + ')'
             } else {
-              str += '分派人:' + this.user.find(g => g.value === a.account_id).label
+              str += this.conditions[2].find(c2 => c2.value === c.condition_value).label
             }
-          } else {
-            str += ' 升级给:' + this.user.find(g => g.value === a.account_id).label
-          }
+            length++
+            if (length < source.group_condition.length) {
+              str += relation
+            }
+          })
+          str += '\n'
         })
         return str
       } catch (e) {
+        console.log(e)
         return '无分派人信息'
       }
     },
@@ -681,14 +703,14 @@ export default {
       return this.selectedRowKeys.length > 0
     }
   },
-  mounted () {
-    this.fetchList()
-    this.fetchSource()
-    this.fetchGroup()
-    this.fetchUser()
-    this.fetchCondition('1')
-    this.fetchCondition('2')
-    this.fetchCondition('3')
+  async mounted () {
+    await this.fetchCondition('1')
+    await this.fetchCondition('2')
+    await this.fetchCondition('3')
+    await this.fetchList()
+    await this.fetchSource()
+    await this.fetchGroup()
+    await this.fetchUser()
   },
   beforeCreate () {
     judgeRoleToAlertView()
