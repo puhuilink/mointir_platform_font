@@ -1,7 +1,7 @@
 <template>
   <a-modal
     title="查看排班"
-    :width="1200"
+    :width="800"
     :visible="visible"
     :loading="loading"
     centered
@@ -10,20 +10,22 @@
     <template #footer>
       <a-button @click="onCancel">取消</a-button>
     </template>
-    <a-calendar
-      :validRange="[startTime, endTime]"
-    >
-      <ul slot="dateCellRender" slot-scope="value" class="events">
-        <li v-for="item in getListData(value)" :key="item.content" style="list-style: none">
-          <a-popover trigger="hover">
-            <a-badge :status="item.type" :text="item.content" />
-            <template #content>
-              {{ item.title }}
-            </template>
-          </a-popover>
-        </li>
-      </ul>
-    </a-calendar>
+    <div class="cal">
+      <a-calendar
+        :validRange="[startTime, endTime]"
+      >
+        <ul slot="dateCellRender" slot-scope="value" class="events">
+          <li v-for="item in getListData(value)" :key="item.content" style="list-style: none">
+            <a-popover trigger="hover">
+              <a-badge :status="item.type" :text="item.content" />
+              <template #content>
+                {{ item.title }}
+              </template>
+            </a-popover>
+          </li>
+        </ul>
+      </a-calendar>
+    </div>
   </a-modal>
 </template>
 

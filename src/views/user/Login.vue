@@ -115,18 +115,25 @@
       </a-form-item>
 
     </a-form>
-
+    <secondFactoryOTP ref="factory" @close="onClose" @loginSuccess="finalLogin"></secondFactoryOTP>
+    <RegOTP ref="reg" @close="onClose" @otpSuccess="finalLogin"></RegOTP>
   </div>
 </template>
 
 <script>
 import { mapActions } from 'vuex'
 import { UserService } from '@/api'
+import axios from 'axios'
+import secondFactoryOTP from '@/components/otp/SecondFactorOTP'
+import RegOTP from '@/components/otp/RegOTP'
 const VUE_APP_SMS_ENABLED = process.env.VUE_APP_SMS_ENABLED === 'true'
 
 export default {
   name: 'Login',
-  components: {},
+  components: {
+    secondFactoryOTP,
+    RegOTP
+  },
   data () {
     return {
       VUE_APP_SMS_ENABLED,
@@ -220,13 +227,12 @@ export default {
       const {
         form: { validateFields },
         state,
-        customActiveKey,
-        Login
+        customActiveKey
       } = this
 
       const validateFieldsKey = customActiveKey === ['userId', 'pwd', 'mobile', 'verifCode']
 
-      validateFields(validateFieldsKey, { force: true }, (err, values) => {
+      validateFields(validateFieldsKey, { force: true }, async (err, values) => {
         if (err) {
           return
         }
@@ -244,13 +250,48 @@ export default {
         Reflect.deleteProperty(loginParams, 'userId')
         loginParams[!state.loginType ? 'email' : 'userId'] = values.userId
         loginParams.pwd = values.pwd
-        Login(loginParams)
-          .then((res) => this.loginSuccess(res))
-          .catch(err => this.requestFailed(err))
-          .finally(() => {
-            state.loginBtn = false
-          })
+        this.loginParams = loginParams
+        axios.post('/otp/getStatus', {
+          appId: 'tongyijiankong',
+          userName: values.userId,
+          transNo: 'transNo1'
+        }, {
+          baseURL: process.env.VUE_APP_OTP_BASE_URL
+        }).then((res) => {
+          if (res.data.statusCode === 1201) {
+            this.$refs.reg.otpBind({
+              appId: 'tongyijiankong',
+              userName: values.userId,
+              transNo: 'transNo1'
+            })
+          } else if (res.data.statusCode === 1200) {
+            this.$refs.factory.onShow({
+              appId: 'tongyijiankong',
+              userName: values.userId,
+              transNo: 'transNo1'
+            })
+          }
+        })
+
+        // Login(loginParams)
+        //   .then((res) => this.loginSuccess(res))
+        //   .catch(err => this.requestFailed(err))
+        //   .finally(() => {
+        //     state.loginBtn = false
+        //   })
       })
+    },
+    onClose () {
+      this.state.loginBtn = false
+    },
+    finalLogin () {
+      console.log('开始登录')
+      this.Login(this.loginParams)
+        .then((res) => this.loginSuccess(res))
+        .catch(err => this.requestFailed(err))
+        .finally(() => {
+          this.state.loginBtn = false
+        })
     },
     // 获取验证码
     getCaptcha (e) {
@@ -299,7 +340,7 @@ export default {
     //   })
     // },
     loginSuccess (res) {
-      this.$router.push({ path: '/' })
+      this.$router.push({ path: '/alertManagerPlatform' })
       this.isLoginError = false
     },
     requestFailed (err) {
@@ -314,6 +355,10 @@ export default {
 .main{
   padding:30px 40px;
   background: rgba(0,0,0, 0.5);
+  position: absolute;
+  left:50%;
+  top:50%;
+  transform: translate(-50%, -50%);
 }
 
 .user-layout-login {

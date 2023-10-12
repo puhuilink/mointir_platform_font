@@ -5,8 +5,8 @@
     <div class="container">
       <div class="top">
         <div class="header">
-          <img class="logo" alt="logo" src="@/assets/images/title.png"/>
-          <span class="title">机房运维安全管控系统</span>
+          <img class="logo" alt="logo" src="@/assets/logo.png"/>
+          <span class="title">统一告警平台</span>
           <!--          <p class="small">Visualization and Insight for Your Business and Environment</p>-->
         </div>
         <div class="desc"></div>
@@ -99,6 +99,10 @@ export default {
       .header {
         // height: 44px;
         line-height: 44px;
+        position: absolute;
+        left:50%;
+        top:25%;
+        transform: translate(-50%, -50%);
 
         .badge {
           position: absolute;

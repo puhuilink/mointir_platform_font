@@ -34,7 +34,9 @@ const {
   VUE_APP_SDWAN_ORIGINAL_URL,
   VUE_APP_MV_API_BASE_URL,
   VUE_APP_ALARM_BASE_URL,
-  VUE_APP_ALARM_ORIGINAL_URL
+  VUE_APP_ALARM_ORIGINAL_URL,
+  VUE_APP_OTP_BASE_URL,
+  VUE_APP_OTP_BASE_ORIGINAL_URL
 } = process.env
 
 const useCDN = VUE_APP_ENABLED_CDN === 'true'
@@ -251,6 +253,15 @@ const vueConfig = {
         changeOrigin: true,
         pathRewrite: {
           [VUE_APP_VIEW_THUMBNAIL_URI]: ''
+        }
+      },
+      // otp二次免密访问
+      [VUE_APP_OTP_BASE_URL]: {
+        target: VUE_APP_OTP_BASE_ORIGINAL_URL,
+        ws: false,
+        changeOrigin: true,
+        pathRewrite: {
+          [VUE_APP_OTP_BASE_URL]: ''
         }
       }
     }

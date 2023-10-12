@@ -7,14 +7,14 @@ export const asyncRouterMap = [
     name: 'index',
     component: BasicLayout,
     meta: { title: '首页' },
-    redirect: '/OperationMonitoring/Device',
+    redirect: '/view/display',
     children: [
       ...process.env.NODE_ENV === 'production' ? [] : [
         {
           path: '/dev-debug',
           // component: () => import('@/views/dev-debug'),
-          // component: () => import('@/components/Elements/Report/ReportPreviewElement'),
-          component: () => import('@/views/SecurityMonitoring/view/safeTouch'),
+          component: () => import('@/components/Elements/Report/ReportPreviewElement'),
+          // component: () => import('@/views/SecurityMonitoring/view/safeTouch'),
           meta: { title: '开发调试页面', keepAlive: true, icon: 'bug' },
           name: 'devTest'
         }
@@ -42,45 +42,42 @@ export const asyncRouterMap = [
         ]
       },
 
-      {
-        path: '/OperationMonitoring',
-        name: 'Operation',
-        redirect: '/OperationMonitoring/Device',
-        component: RouteView,
-        children: [
-          {
-            path: '/OperationMonitoring/Device',
-            name: 'Operation',
-            redirect: '/OperationMonitoring/Device',
-            component: RouteView,
-            children: [
-              {
-                path: '/OperationMonitoring/Device/DataCenter',
-                name: 'DataCenter',
-                component: () => import('@/views/SecurityMonitoring/view/datacenter'),
-                meta: { title: '数据中心管理' }
-              }
-            ],
-            meta: { title: '设备监控' }
-          },
-          {
-            path: '/OperationMonitoring/DH',
-            name: 'DH',
-            redirect: '/OperationMonitoring/DH',
-            component: RouteView,
-            children: [
-              {
-                path: '/OperationMonitoring/DH/DhMange',
-                name: 'DhMange',
-                component: () => import('@/views/SecurityMonitoring/view/xungeng'),
-                meta: { title: '动环监控管理' }
-              }
-            ],
-            meta: { title: '动环监控' }
-          }
-        ],
-        meta: { title: '运维监控', icon: 'laptop' }
-      },
+      // {
+      //   path: '/OperationMonitoring',
+      //   name: 'Operation',
+      //   component: RouteView,
+      //   children: [
+      //     {
+      //       path: '/OperationMonitoring/Device',
+      //       name: 'Operation',
+      //       component: RouteView,
+      //       children: [
+      //         {
+      //           path: '/OperationMonitoring/Device/DataCenter',
+      //           name: 'DataCenter',
+      //           component: () => import('@/views/SecurityMonitoring/view/datacenter'),
+      //           meta: { title: '数据中心管理' }
+      //         }
+      //       ],
+      //       meta: { title: '设备监控' }
+      //     },
+      //     {
+      //       path: '/OperationMonitoring/DH',
+      //       name: 'DH',
+      //       component: RouteView,
+      //       children: [
+      //         {
+      //           path: '/OperationMonitoring/DH/DhMange',
+      //           name: 'DhMange',
+      //           component: () => import('@/views/SecurityMonitoring/view/xungeng'),
+      //           meta: { title: '动环监控管理' }
+      //         }
+      //       ],
+      //       meta: { title: '动环监控' }
+      //     }
+      //   ],
+      //   meta: { title: '运维监控', icon: 'laptop' }
+      // },
 
       // alarm
       {
@@ -364,7 +361,7 @@ export const asyncRouterMap = [
         hidden: false,
         component: RouteView,
         redirect: '/alertManagerPlatform/config',
-        meta: { title: '统一告警', keepAlive: true, icon: 'bug', permission: ['F013'] },
+        meta: { title: '统一告警', keepAlive: true, icon: 'bug' },
         children: [
           // {
           //   path: '/alarm/profile',
@@ -378,7 +375,7 @@ export const asyncRouterMap = [
             hidden: false,
             component: RouteView,
             redirect: '/alertManagerPlatform/integration/platform',
-            meta: { title: '集成', keepAlive: true, icon: 'deployment-unit', permission: ['F013002'] },
+            meta: { title: '集成', keepAlive: true, icon: 'deployment-unit' },
             children: [
               {
                 path: '/alertManagerPlatform/integration/newAlertSource',
@@ -410,19 +407,19 @@ export const asyncRouterMap = [
             hidden: false,
             component: RouteView,
             redirect: '/alertManagerPlatform/config/deliver',
-            meta: { title: '告警配置', keepAlive: true, icon: 'setting', permission: ['F013001'] },
+            meta: { title: '告警配置', keepAlive: true, icon: 'setting' },
             children: [
               {
                 path: '/alertManagerPlatform/config/deliver',
                 name: 'Deliver',
                 component: () => import('@/views/alert-manager/config/index'),
-                meta: { title: '分派策略', permission: ['F013001001'] }
+                meta: { title: '分派策略' }
               },
               {
                 path: '/alertManagerPlatform/config/notifyRule',
                 name: 'NotifyRule',
                 component: () => import('@/views/alert-manager/config/notifyRule'),
-                meta: { title: '通知策略', permission: ['F013001002'] }
+                meta: { title: '通知策略' }
               },
               {
                 path: '/alertManagerPlatform/config/shieldRule',
@@ -434,7 +431,7 @@ export const asyncRouterMap = [
               {
                 path: '/alertManagerPlatform/config/notified-group',
                 component: () => import('@/views/notificationGroup/index'),
-                meta: { title: '通知组管理', keepAlive: true, permission: ['F013001003'] },
+                meta: { title: '通知组管理', keepAlive: true },
                 name: 'notice-group'
               },
 
@@ -442,7 +439,7 @@ export const asyncRouterMap = [
               {
                 path: '/alertManagerPlatform/config/notice-template',
                 component: () => import('@/views/alert-manager/noticeTemplate/index'),
-                meta: { title: '模板管理', keepAlive: true, permission: ['F013001004'] },
+                meta: { title: '模板管理', keepAlive: true },
                 name: 'notice-template'
               },
 
@@ -450,7 +447,7 @@ export const asyncRouterMap = [
               {
                 path: '/alertManagerPlatform/work-manage',
                 component: () => import('@/views/work-manage/index'),
-                meta: { title: '排班管理', keepAlive: true, permission: ['F013001005'] },
+                meta: { title: '排班管理', keepAlive: true },
                 name: 'work-manage'
               },
 
@@ -458,7 +455,7 @@ export const asyncRouterMap = [
               {
                 path: '/alertManagerPlatform/self-Defining',
                 component: () => import('@/views/alert-manager/config/selfDefiningTag.vue'),
-                meta: { title: '自定义标签', keepAlive: true, permission: ['F013001005'] },
+                meta: { title: '自定义标签', keepAlive: true },
                 name: 'self-Tag'
               }
             ]
@@ -469,7 +466,7 @@ export const asyncRouterMap = [
             hidden: false,
             component: RouteView,
             redirect: '/alertManagerPlatform/alarm/index',
-            meta: { title: '告警管理', keepAlive: true, icon: 'alert', permission: ['F013003'] },
+            meta: { title: '告警管理', keepAlive: true, icon: 'alert' },
             children: [
               {
                 path: '/alertManagerPlatform/alarm/index',

@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import { UserService, AuthorizeObjectService } from '@/api'
 import { decrypt } from '@/utils/aes'
-import { ACCESS_TOKEN, USER, ROLES } from '@/store/mutation-types'
+import { ACCESS_TOKEN, USER, ROLES, SHOW_USER } from '@/store/mutation-types'
 import { getTree, getButtonTree } from '@/utils/util'
 import router from '@/router'
 
@@ -127,13 +127,13 @@ const user = {
 
     // 登录
     Login ({ commit }, userInfo) {
-      // UserService.seondLogin({ userId: 'mZ4ImnGXmqK', pwd: '9ZAauDJ8S2Nd9' })
-      //   .then(({ data }) => data)
-      //   .then(decrypt)
-      //   .then(JSON.parse)
-      //   .then(({ organizeList = [], ...user }) => {
-      //     Vue.ls.set(SHOW_USER, user)
-      //   })
+      UserService.seondLogin({ userId: 'mZ4ImnGXmqK', pwd: '9ZAauDJ8S2Nd9' })
+        .then(({ data }) => data)
+        .then(decrypt)
+        .then(JSON.parse)
+        .then(({ organizeList = [], ...user }) => {
+          Vue.ls.set(SHOW_USER, user)
+        })
       return UserService.login(userInfo)
         .then(({ data }) => data)
         .then(decrypt)

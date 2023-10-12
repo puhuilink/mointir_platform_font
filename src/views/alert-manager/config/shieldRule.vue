@@ -1,6 +1,8 @@
 <template>
   <div class="deliverRules">
-    <div style="margin-bottom:10px;display: flex;flex-direction: row-reverse"><a-button icon="plus" type="primary" @click="openModal(null)">新建屏蔽规则</a-button></div>
+    <div style="margin-bottom:10px;display: flex;flex-direction: row-reverse">
+      <a-button icon="plus" type="primary" @click="openModal(null)">新建屏蔽规则</a-button>
+    </div>
     <a-modal
       :title="updateFlag?'修改屏蔽规则':'新建屏蔽规则'"
       :visible="visible"
@@ -10,7 +12,11 @@
       @cancel="closeModal"
       @close="closeModal"
     >
-      <a-form-model ref="ruleForm" :model="formState" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol">
+      <a-form-model
+        ref="ruleForm"
+        :model="formState"
+        :label-col="formItemLayout.labelCol"
+        :wrapper-col="formItemLayout.wrapperCol">
         <a-form-model-item
           label="屏蔽策略名称"
           :rules="[{ required: true, message: '屏蔽策略名称必填', trigger: 'change' }]"
@@ -18,10 +24,20 @@
         >
           <a-input v-model="formState.policy_name" />
         </a-form-model-item>
-        <a-form-model-item label="告警源" :rules="[{ required: true, message: '告警源必选', trigger: 'change' }]" prop="source_id">
-          <a-select label-in-value :value="{ key: formState.source_id,label:formState.source_name }" :options="alertSource" @change="sourceChange"/>
+        <a-form-model-item
+          label="告警源"
+          :rules="[{ required: true, message: '告警源必选', trigger: 'change' }]"
+          prop="source_id">
+          <a-select
+            label-in-value
+            :value="{ key: formState.source_id,label:formState.source_name }"
+            :options="alertSource"
+            @change="sourceChange" />
         </a-form-model-item>
-        <a-form-model-item label="分派条件" :rules="[{ required:true, type: 'array', validator:sourcePass, trigger: 'change' }]" prop="policy_source">
+        <a-form-model-item
+          label="分派条件"
+          :rules="[{ required:true, type: 'array', validator:sourcePass, trigger: 'change' }]"
+          prop="policy_source">
           <div style="">
             <div
               style="display: grid;
@@ -29,42 +45,67 @@
             grid-auto-columns: 1fr;"
               v-for="(map,index) in formState.policy_source"
               :key="index">
-              <a-avatar :size="32" class="circle"> {{ index+1 }}</a-avatar >
+              <a-avatar :size="32" class="circle"> {{ index + 1 }}</a-avatar>
               <div>
                 <div style="display: flex;align-items: center;">
-                  规则之间的条件：<a-radio-group :options="options" v-model="map.group_relation" :default-value="1" />
+                  规则之间的条件：
+                  <a-radio-group :options="options" v-model="map.group_relation" :default-value="1" />
                   <div style="display: flex;flex-direction: revert">
-                    <a-icon type="delete" v-if="formState.policy_source.length !== 1" @click="deleteStrategyByIndex(index)"/>
+                    <a-icon
+                      type="delete"
+                      v-if="formState.policy_source.length !== 1"
+                      @click="deleteStrategyByIndex(index)" />
                   </div>
                 </div>
                 <div v-for="(m,i) in map.group_condition" :key="i">
-                  <a-select v-model="m.condition_name" style="width: 25%;margin-right: 5px" :options="conditions[0]" @change="nameChange(m)"/>
-                  <a-select v-model="m.condition_symbol" style="width: 25%;margin-right: 5px" :options="conditions[1]"/>
+                  <a-select
+                    v-model="m.condition_name"
+                    style="width: 25%;margin-right: 5px"
+                    :options="conditions[0]"
+                    @change="nameChange(m)" />
+                  <a-select
+                    v-model="m.condition_symbol"
+                    style="width: 25%;margin-right: 5px"
+                    :options="conditions[1]" />
                   <span>
                     <a-select
                       mode="multiple"
                       v-model="m.condition_value"
                       style="width: 40%;margin-right: 5px"
                       :options="conditions[2]"
-                      v-if="m.condition_name === '294504721270575106'"/>
-                    <a-input v-else v-model="m.condition_value" style="width: 30%;margin-right: 5px"/>
+                      v-if="m.condition_name === '294504721270575106'" />
+                    <a-input v-else v-model="m.condition_value" style="width: 30%;margin-right: 5px" />
                   </span>
-                  <div :style="{ visibility: map.group_condition.length > 1 ? 'default' : 'hidden', display: 'inline' }">
-                    <a-icon type="delete" @click="deleteRuleByIndex(index,i)"/>
-                    <a-divider type="vertical"/>
+                  <div
+                    :style="{ visibility: map.group_condition.length > 1 ? 'default' : 'hidden', display: 'inline' }">
+                    <a-icon type="delete" @click="deleteRuleByIndex(index,i)" />
+                    <a-divider type="vertical" />
                   </div>
-                  <a-icon type="plus" @click="addRule(index)"/>
+                  <a-icon type="plus" @click="addRule(index)" />
                 </div>
               </div>
-            </div></div>
+            </div>
+          </div>
 
           <a-button class="add_button" @click="addStrategy"> 增加</a-button>
         </a-form-model-item>
-        <a-form-model-item label="生效时间" :rules="[{ required: true, message: '生效时间必选', trigger: 'change' }]" prop="start_time">
-          <a-date-picker show-time placeholder="生效时间 " @change="onStartChange" format="YYYY-MM-DDTHH:mm:ssZ" />
+        <a-form-model-item
+          label="生效时间"
+          :rules="[{ required: true ,message: '生效时间必选', trigger: 'change' }]"
+          prop="start_time">
+          <a-date-picker
+            show-time
+            placeholder="生效时间 "
+            @change="onStartChange"
+            format="YYYY-MM-DDTHH:mm:ssZ"
+            style="width: 50%" />
         </a-form-model-item>
-        <a-form-model-item label="失效时间" :rules="[{ required: true, message: '失效时间必选', trigger: 'change' }]" prop="end_time">
-          <a-date-picker show-time placeholder="失效时间 " @change="onEndChange" format="YYYY-MM-DDTHH:mm:ssZ"/>
+        <a-form-model-item
+          label="失效时间"
+          :rules="[{ required: true, message: '失效时间必选', trigger: 'change' }, { trigger: 'change'}]"
+          prop="end_time"
+          style="width: 50%">
+          <a-date-picker show-time placeholder="失效时间 " @change="onEndChange" format="YYYY-MM-DDTHH:mm:ssZ" />
         </a-form-model-item>
       </a-form-model>
     </a-modal>
@@ -85,7 +126,7 @@
             grid-auto-columns: 1fr;"
           v-for="(map,index) in watchForm.policy_source"
           :key="index">
-          <a-avatar :size="24" class="circle"> {{ map.group_relation === '1'?'或':'且' }}</a-avatar >
+          <a-avatar :size="24" class="circle"> {{ map.group_relation === '1' ? '或' : '且' }}</a-avatar>
           <div
             style="display: grid;
             grid-template-rows: 50px 50px;
@@ -115,7 +156,7 @@
                   v-if="m.condition_name === '294504721270575106'"
                   :show-arrow="false"
                 />
-                <a-input disabled v-else v-model="m.condition_value" style="width: 30%;margin-right: 5px"/>
+                <a-input disabled v-else v-model="m.condition_value" style="width: 30%;margin-right: 5px" />
               </span>
             </div>
           </div>
@@ -129,7 +170,7 @@
       :data-source="data">
       <a slot="name" slot-scope="text">{{ text }}</a>
       <template :slot="'levelUp'" slot-scope="text,record">
-        {{ record.policy_account.length>1?'是':'否' }}
+        {{ record.policy_account.length > 1 ? '是' : '否' }}
       </template>
       <template :slot="'notify'" slot-scope="text,record">
         {{ notifyContent(record.policy_account) }}
@@ -165,6 +206,8 @@ import { ApSourceService } from '@/api/service/ApSourceService'
 import store from '@/store/index'
 import { alarm } from '@/utils/request'
 import { judgeRoleToAlertView } from '@/utils/util'
+import { USER } from '@/store/mutation-types'
+import Vue from 'vue'
 
 const columns = [
   {
@@ -202,7 +245,7 @@ const columns = [
 ]
 const data = []
 const pagination = {
-  pageSizeOptions: [ '5', '10', '20', '30' ],
+  pageSizeOptions: ['5', '10', '20', '30'],
   defaultCurrent: 1,
   pageSize: 10,
   defaultPageSize: 10,
@@ -245,8 +288,7 @@ const originalData = {
   policy_source: [
     _.cloneDeep(originalStrategy)
   ],
-  policy_account: [
-  ]
+  policy_account: []
 }
 
 export default {
@@ -417,7 +459,9 @@ export default {
         })
       } else {
         if (this.alertSource.length) {
-          setTimeout(() => { this.sourceChange(this.alertSource[0]) }, 1000)
+          setTimeout(() => {
+            this.sourceChange(this.alertSource[0])
+          }, 1000)
         } else {
           this.$message.error('该通知组未创建数据源或已存在屏蔽策略！')
         }
@@ -534,7 +578,16 @@ export default {
         backup.creator = store.getters.userId
         url = '/platform/policy/add'
       }
-
+      console.log('123', backup)
+      backup.policy_account = [{ // 策略分派人
+        id: '', // 策略分派人ID，新增时为空，修改时需填写
+        policy_id: '', // 策略ID，新增时为空，修改时需填写
+        account_id: store.getters.userId, // 立即通知人ID
+        group_id: '', // 立即通知组ID
+        upgrade_interval: 0, // 告警升级时间
+        upgrade_count: 0, // 升级次数，0代表立即通知
+        account_type: '1' // 通知组/人，0 - 通知组， 1 - 通知人
+      }]
       const res = await alarm.post(url, backup)
       if (res.code === 200) {
         this.$message.success(this.updateFlag ? '修改成功' : '新建成功！')
@@ -644,15 +697,17 @@ export default {
 </script>
 
 <style lang='less' scoped>
-.circle{
-  background: rgba(9, 117, 209, 0.10) ;
+.circle {
+  background: rgba(9, 117, 209, 0.10);
   color: #0975D1;
 }
-.add_button{
+
+.add_button {
   width: 100px;
   background-color: rgba(34, 127, 230, 1);
   color: white
 }
+
 * {
   marigin: 0px;
   //background-color: #EFF3F7;
@@ -667,6 +722,7 @@ export default {
   float: left;
   width: 40%;
 }
+
 -
 .wd {
   width: 100%;
@@ -678,11 +734,13 @@ export default {
 
 .form {
   margin-right: 10px;
+
   .fold {
     flex: 1;
     display: inline-block;
     width: calc(100% - 216px);
   }
+
   .collapse {
     float: right;
     overflow: hidden;
