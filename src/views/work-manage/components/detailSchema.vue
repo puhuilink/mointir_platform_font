@@ -99,5 +99,12 @@ export default {
 </script>
 
 <style scoped>
+.events {
+  padding: 0;
+  height: 30px;
+}
 
+/deep/.ant-fullcalendar-date {
+  height: 80px !important;
+}
 </style>
