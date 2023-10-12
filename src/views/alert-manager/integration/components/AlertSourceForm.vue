@@ -189,7 +189,7 @@ export default {
       type: Object,
       default: () => {}
     },
-    platformId: {
+    platform: {
       type: String,
       default: '302455444528566272'
     }
@@ -418,7 +418,7 @@ export default {
       } else {
         delete this.formState.compressDuration
       }
-      const sourceData = { ...this.formState, platformId: this.platformId, sampleData: this.jsonContent }
+      const sourceData = { ...this.formState, platformId: this.platform, sampleData: this.jsonContent }
       let requestAddress = '/api/integration/source/add'
       if (this.record && this.record !== {}) {
         requestAddress = '/api/integration/source/update'

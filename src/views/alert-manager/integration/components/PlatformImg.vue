@@ -350,6 +350,7 @@ export default {
         return
       }
       pp.url = this.baseUrl + pp.url
+      pp.id = id
       await this.$router.push({ name: 'NewAlertSource', query: { plat: pp } })
     }
   },

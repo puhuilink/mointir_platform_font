@@ -11,7 +11,7 @@
           </div>
         </div>
         <a-divider style="background: rgb(236,236,236)" />
-        <div><AlertSourceForm :record="record" :platform-id="platform.id"/></div>
+        <div><AlertSourceForm :record="record" :platform="platform.id"/></div>
       </div>
     </div>
     <div class="item"/>
@@ -79,6 +79,7 @@ export default {
       this.$router.push('platform')
     },
     loadPlatformList () {
+      console.log(this.platform)
       const plat = this.platform
       if (plat.levelRelation !== null && plat.levelRelation !== {}) {
         const dataList = []
