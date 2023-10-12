@@ -103,9 +103,13 @@
         <a-form-model-item
           label="失效时间"
           :rules="[{ required: true, message: '失效时间必选', trigger: 'change' }, { trigger: 'change'}]"
-          prop="end_time"
-          style="width: 50%">
-          <a-date-picker show-time placeholder="失效时间 " @change="onEndChange" format="YYYY-MM-DDTHH:mm:ssZ" />
+          prop="end_time">
+          <a-date-picker
+            show-time
+            placeholder="失效时间 "
+            @change="onEndChange"
+            format="YYYY-MM-DDTHH:mm:ssZ"
+            style="width: 50%"/>
         </a-form-model-item>
       </a-form-model>
     </a-modal>
@@ -541,12 +545,15 @@ export default {
       if (!e) {
         this.$message.error('找不到正确的告警源！')
       }
-      this.formState.source_id = e.value
+      if (Object.hasOwn(e, 'value')) {
+        this.formState.source_id = e.value
+      } else {
+        this.formState.source_id = e.key
+      }
       this.formState.source_name = e.label
       // console.log('111')
     },
     async handleOk () {
-      console.log(this.formState)
       let flag = false
       this.$refs.ruleForm.validate(valid => {
         if (!valid) {
@@ -578,7 +585,6 @@ export default {
         backup.creator = store.getters.userId
         url = '/platform/policy/add'
       }
-      console.log('123', backup)
       backup.policy_account = [{ // 策略分派人
         id: '', // 策略分派人ID，新增时为空，修改时需填写
         policy_id: '', // 策略ID，新增时为空，修改时需填写
@@ -622,10 +628,6 @@ export default {
           let length = 0
           const relation = this.options.find(o => o.value === source.group_relation).label
           source.group_condition.forEach(c => {
-            console.log(this.conditions[0].find(c0 => c0.value === c.condition_name))
-            console.log(this.conditions[0])
-            console.log(this.conditions[1].find(c0 => c0.value === c.condition_symbol))
-            console.log(this.conditions[1])
             str += this.conditions[0].find(c0 => c0.value === c.condition_name).label +
               this.conditions[1].find(c1 => c1.value === c.condition_symbol).label
             const arr = c.condition_value.split(',')
