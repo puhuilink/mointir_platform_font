@@ -2,7 +2,7 @@
   <div class="mainDisplay">
     <div class="topTitle">
       <h2 style="width: 93%">数据标签列表</h2>
-      <a-button type="primary" style="width: 100px; height: 100%" @click="openModal" >新建</a-button>
+      <a-button type="primary" style="width: 100px; height: 100%" @click="openModal()" >新建</a-button>
     </div>
     <div class="mainBody" ref="mainBody">
       <div class="leftList">
@@ -26,6 +26,7 @@
           :data-source="data">
           <span :slot="'index'" slot-scope="text,record,index" >{{ index }}</span>
           <span slot="sourceName">{{ getSourceName(activeSourceId) }}</span>
+          <span slot="targetField" slot-scope="text,record,index">{{ mappingLabels[text] }}</span>
           <span slot="type">告警源</span>
           <template :slot="'action'" slot-scope="text,record">
             <a-button @click="openModal(record)">编辑</a-button>
@@ -59,7 +60,7 @@
           <a-select v-model="formState.sourceField" :options="sourceOptions" @change="sourceChange"/>
         </a-form-model-item>
         <a-form-model-item label="映射字段" :rules="[{ required: true, message: '映射字段必选', trigger: 'change' }]" prop="targetField" >
-          <a-select v-model="formState.targetField" :options="mappingOptions" @change="targetChange" :disabled="targetFlag"/>
+          <a-select v-model="formState.targetField" :options="updateFlag?mappingOptions:remainMappingOptions" @change="targetChange" :disabled="targetFlag"/>
         </a-form-model-item>
         <a-form-model-item label="说明" v-if="formState.targetField === 'uniqueKey'" :rules="[{ required: formState.targetField === 'uniqueKey', message: '告警源字段必填', trigger: 'change' }]" prop="sourceField">
           <a-input v-model="formState.remark"/>
@@ -107,7 +108,8 @@ export default {
         {
           title: '预留字段',
           align: 'center',
-          dataIndex: 'targetField'
+          dataIndex: 'targetField',
+          scopedSlots: { customRender: 'targetField' }
         },
         {
           title: 'Key',
@@ -163,6 +165,7 @@ export default {
       activeSourceId: '',
       mappingList: [],
       mappingOptions: [],
+      remainMappingOptions: [],
       sourceOptions: [],
       visible: false,
       updateFlag: false,
@@ -196,10 +199,27 @@ export default {
         delete this.formState.targetType
         this.targetFlag = !record.updateFlag
       } else {
+        this.updateFlag = false
+        this.getRemainedMapping()
+        if (this.remainMappingOptions.length === 0) {
+          this.$message.warn('无可新增映射字段！')
+          this.closeModal()
+        }
         this.formState.sourceId = this.activeSourceId
         delete this.formState.mappingId
       }
       this.visible = true
+    },
+    getRemainedMapping () {
+      const arr = []
+      this.mappingOptions.forEach(mapping => {
+        console.log(mapping.key)
+        if (this.data.indexOf(entity => entity.targetField === mapping.key) !== -1) {
+          arr.push(mapping)
+        }
+      })
+      console.log(arr)
+      this.remainMappingOptions = arr
     },
     async deleteTag (mappingId) {
       try {
@@ -240,7 +260,11 @@ export default {
         }
         this.closeModal()
       } catch (e) {
-        this.$message.error('网络请求错误！')
+        if (Object.hasOwn(e, 'response')) {
+          this.$message.error(e.response.data.msg)
+        } else {
+          this.$message.error('网络请求错误！')
+        }
       }
     },
     sourceChange (e) {
