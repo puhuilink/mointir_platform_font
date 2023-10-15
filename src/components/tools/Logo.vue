@@ -2,7 +2,7 @@
   <div class="logo">
     <router-link :to="{ name: 'view' }">
       <img :src="logo" alt="" />
-      <h1 v-if="showTitle" class="logo__title">统一告警平台</h1>
+      <h1 v-if="showTitle" class="logo__title">统一监控管理平台</h1>
     </router-link>
   </div>
 </template>
@@ -15,7 +15,7 @@ export default {
   props: {
     title: {
       type: String,
-      default: '统一告警平台',
+      default: '统一监控管理平台',
       required: false
     },
     showTitle: {

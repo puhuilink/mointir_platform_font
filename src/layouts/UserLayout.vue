@@ -6,7 +6,7 @@
       <div class="top">
         <div class="header">
           <img class="logo" alt="logo" src="@/assets/logo.png"/>
-          <span class="title">统一告警平台</span>
+          <span class="title">统一监控管理平台</span>
           <!--          <p class="small">Visualization and Insight for Your Business and Environment</p>-->
         </div>
         <div class="desc"></div>
