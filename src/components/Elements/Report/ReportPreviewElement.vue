@@ -115,7 +115,6 @@ export default {
       const res_7_all = dealQuery(await sql(pastAllSevenDayAlarm))
       this.post7AllAlarm = _.get(res_7_all, '0.total', 0)
       const res_7_main_list = sqlResultDealer(await sql(past7DaysMainAlarm))
-      console.log('res', res_7_main_list)
       this.past7MainList = res_7_main_list
       this.$refs.mainAlarm.load(pass7DayAllAlarmData(res_7_main_list, 'main'))
       const res_7_all_list = sqlResultDealer(await sql(past7DaysAllAlarm))
@@ -133,7 +132,6 @@ export default {
         this.pieData.series[0].data = []
         this.pieData.graphic[0].invisible = false
         this.$refs.pie.load(this.pieData)
-        console.log('无数据')
       } else {
         this.pieData.graphic[0].invisible = true
         const name = this.alarmTypeList.filter(el => el.id === val)[0].name
@@ -141,7 +139,6 @@ export default {
         this.pieData.title.subtext = name
         this.pieData.series[0].data = pieOption
         this.$refs.pie.load(this.pieData)
-        console.log('有数据')
       }
     },
     // 告警类型统计变化
@@ -150,11 +147,9 @@ export default {
     },
     // 告警处置统计
     async levelAlarm (dates, dateStrings) {
-      console.log(dates, dateStrings)
       const hanglingRate = dealQuery(await sql(handlingAvgTime(dateStrings)))
       const claimHour = dealQuery(await sql(handlingAvgClaimTime(dateStrings)))
       const handingHour = dealQuery(await sql(handlingAlarm(dateStrings)))
-      console.log(hanglingRate, claimHour, handingHour, _.get(handingHour, '[]', []))
       this.dealStatics.xAxis.data = handingHour.map(el => el.name)
       // 告警数量
       this.dealStatics.series[0].data = handingHour.map(el => _.get(el, 'alert_count', 0))
@@ -164,9 +159,7 @@ export default {
     },
     // 告警分级统计
     async dealAlarm (dates, dateStrings) {
-      console.log(dates, dateStrings)
       const res = dealQuery(await sql(gradedStatistics))
-      console.log('res', res)
       this.peizhi.xAxis.data = res.map(el => el.name)
       // 告警数量
       this.dealStatics.series[0].data = res.map(el => _.get(el, 'alert_count', 0))
@@ -180,11 +173,9 @@ export default {
   },
   watch: {
     deviceValue (val) {
-      console.log('timeList改变了', val)
       this.alarmTypeTotal(val, this.deviceTimeList)
     },
     deviceTimeList (val) {
-      console.log('timeList改变了', val)
       this.alarmTypeTotal(this.deviceValue, this.deviceTimeList)
     }
   }
