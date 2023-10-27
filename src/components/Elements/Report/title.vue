@@ -35,7 +35,7 @@ export default {
   top:12px;
 }
 .span_7 {
-  width: 106px;
+  width: 140px;
   height: 16px;
   font-size: 16px;
   font-family: MicrosoftYaHei;

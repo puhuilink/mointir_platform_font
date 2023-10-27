@@ -59,6 +59,7 @@
         <a-button @click="onToggleFlag" :disabled="!hasSelectedOne" v-action:M0111>更改状态</a-button>
         <a-button @click="onAllocateUserAuth" :disabled="!hasSelectedOne" v-action:M0110>分配权限</a-button>
         <a-button @click="onClearError" :disabled="!hasSelectedOne" v-action:M0110>解除限制</a-button>
+        <a-button @click="onResetPoke" :disabled="!hasSelectedOne" v-action:M0110>令牌重置</a-button>
       </template>
     </CTable>
 
@@ -79,6 +80,7 @@ import { Confirm, List } from '@/components/Mixins'
 import { generateQuery } from '@/utils/graphql'
 import _ from 'lodash'
 import { USER_FLAG } from '@/tables/user/enum'
+import axios from 'axios'
 
 export default {
   name: 'User',
@@ -287,6 +289,30 @@ export default {
               this.query(false)
             })
             .catch(this.$notifyError)
+      })
+    },
+
+    // 令牌重置
+    async onResetPoke () {
+      const [{ user_id }] = this.selectedRows
+      this.$promiseConfirmDelete({
+        title: '令牌重置',
+        content: '此操作将重置该用户登录令牌（导致现有令牌失效）, 是否继续？',
+        closable: true,
+        onOk: async () => {
+          await axios.post(`/otp/otp/dereg`, {
+            appId: process.env.VUE_APP_OTP_QUOTE_NAME,
+            userName: user_id,
+            transNo: 'transNo1'
+          })
+            .then(() => {
+              this.$notification.success({
+                message: '系统提示',
+                description: '重置成功'
+              })
+            })
+            .catch(this.$notifyError).finally(() => this.query())
+        }
       })
     }
   }

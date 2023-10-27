@@ -39,7 +39,7 @@ export default {
 }
 
 .size-white {
-  width: 37px;
+  width: 100%;
   height: 40px;
   font-size: 36px;
   font-weight: 400;

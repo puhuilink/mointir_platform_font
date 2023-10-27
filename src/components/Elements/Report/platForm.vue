@@ -2,17 +2,39 @@
   <div class="outer_1">
     <!--    黄块-->
     <div class="block_yellow abs"></div>
-    <span class="font_blue abs">基础资源监控</span>
-    <span class="font_white abs" style="left: 77px;top: 81px;">云上UC-Center</span>
-    <span class="font_white abs" style="left: 219px; top: 81px;">云下Pigoss</span>
-    <a href="www.baidu.com" target="_blank"><img src="./img/pigoss.png" style="left: 84px;top: 35px;" class="abs sign"></a>
-    <a href="www.baidu.com" target="_blank"><img src="./img/pigoss.png" style="left: 225px;top: 35px;" class="abs sign"></a>
+    <span class="font_blue abs">{{ title }}</span>
+    <span class="font_white abs" style="left: 77px;top: 81px;">{{ fontFirst }}</span>
+    <span class="font_white abs" style="left: 219px; top: 81px;">{{ fontSecond }}</span>
+    <a target="_blank"><img :src="require(`./img/${imgFirst}`)" style="left: 84px;top: 35px;" class="abs sign"></a>
+    <a target="_blank"><img :src="require(`./img/${imgSecond}`)" style="left: 225px;top: 35px;" class="abs sign"></a>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'PlatForm'
+  name: 'PlatForm',
+  props: {
+    title: {
+      type: String,
+      default: '基础资源监控'
+    },
+    fontFirst: {
+      type: String,
+      default: '云上UC-Center'
+    },
+    fontSecond: {
+      type: String,
+      default: '云下Pigoss'
+    },
+    imgFirst: {
+      type: String,
+      default: 'h3c.png'
+    },
+    imgSecond: {
+      type: String,
+      default: 'pigoss.png'
+    }
+  }
 }
 </script>
 
@@ -63,6 +85,7 @@ export default {
   background-color: #fff;
   border-radius: 6px;
   border: 1px solid #EFF1F2;
+  padding: 10px 15px;
 }
 .sign:hover {
   box-shadow: 2px 3px 2px 0px #BEBBBB;

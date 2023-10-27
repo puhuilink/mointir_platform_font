@@ -227,7 +227,8 @@ export default {
       const {
         form: { validateFields },
         state,
-        customActiveKey
+        customActiveKey,
+        Login
       } = this
 
       const validateFieldsKey = customActiveKey === ['userId', 'pwd', 'mobile', 'verifCode']
@@ -251,28 +252,36 @@ export default {
         loginParams[!state.loginType ? 'email' : 'userId'] = values.userId
         loginParams.pwd = values.pwd
         this.loginParams = loginParams
-        axios.post('/otp/getStatus', {
-          appId: 'tongyijiankong',
-          userName: values.userId,
-          transNo: 'transNo1'
-        }, {
-          baseURL: process.env.VUE_APP_OTP_BASE_URL
-        }).then((res) => {
-          if (res.data.statusCode === 1201) {
-            this.$refs.reg.otpBind({
-              appId: 'tongyijiankong',
-              userName: values.userId,
-              transNo: 'transNo1'
+        if (JSON.parse(process.env.VUE_APP_OTP_SWITCH)) {
+          axios.post('/otp/getStatus', {
+            appId: 'tongyijiankong',
+            userName: values.userId,
+            transNo: 'transNo1'
+          }, {
+            baseURL: process.env.VUE_APP_OTP_BASE_URL
+          }).then((res) => {
+            if (res.data.statusCode === 1201) {
+              this.$refs.reg.otpBind({
+                appId: 'tongyijiankong',
+                userName: values.userId,
+                transNo: 'transNo1'
+              })
+            } else if (res.data.statusCode === 1200) {
+              this.$refs.factory.onShow({
+                appId: 'tongyijiankong',
+                userName: values.userId,
+                transNo: 'transNo1'
+              })
+            }
+          })
+        } else {
+          Login(loginParams)
+            .then((res) => this.loginSuccess(res))
+            .catch(err => this.requestFailed(err))
+            .finally(() => {
+              state.loginBtn = false
             })
-          } else if (res.data.statusCode === 1200) {
-            this.$refs.factory.onShow({
-              appId: 'tongyijiankong',
-              userName: values.userId,
-              transNo: 'transNo1'
-            })
-          }
-        })
-
+        }
         // Login(loginParams)
         //   .then((res) => this.loginSuccess(res))
         //   .catch(err => this.requestFailed(err))

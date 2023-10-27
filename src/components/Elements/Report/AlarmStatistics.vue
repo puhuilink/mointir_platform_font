@@ -102,9 +102,21 @@ export default {
     }
   },
   methods: {
-    load () {
+    load (option = []) {
       this.myChart = echarts.init(this.$refs.chart)
+      if (option.length === 0) {
+        this.setOption()
+      } else {
+        this.myChart.setOption(option)
+      }
+    },
+    setOption () {
       this.myChart.setOption(this.option)
+    }
+  },
+  watch: {
+    option: (val) => {
+      console.log('改变了', val)
     }
   },
   mounted () {

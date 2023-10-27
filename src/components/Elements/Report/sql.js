@@ -1,3 +1,5 @@
+import moment from 'moment'
+
 export const currentAlarm = 'select count(1) as total from ap_alert where to_char(start_time, \'YYYY-MM-dd\') = to_char(current_date, \'YYYY-MM-dd\')'
 export const currentMainAlarm = 'select\n' +
   'sum(table1.total) as total\n' +
@@ -46,33 +48,33 @@ export const past7DaysMainAlarm = 'select\n' +
   '    group by bucket\n' +
   ') as table2 on table1.collect = table2.bucket\n' +
   'order by table1.collect asc;'
-export const past7DaysAllAlarm = 'select\n' +
-  'table1.collect,\n' +
-  'COALESCE(table3.total,0) total\n' +
-  'from\n' +
-  '(\n' +
-  'SELECT\n' +
-  '    to_char(dt,\'yyyy-MM-dd\') as collect\n' +
-  '\tfrom generate_series(now() - interval \'6 day\',now(),interval \'1 day\') as dt\n' +
-  ') as table1\n' +
-  'left join\n' +
-  '(\n' +
-  '    select\n' +
-  '    table2.bucket,\n' +
-  '    count(1) as total\n' +
-  '    from\n' +
-  '    (\n' +
-  '        select to_char(start_time, \'YYYY-MM-DD\') as bucket\n' +
-  '        from ap_alert\n' +
-  '        where start_time > now() - interval \'6 day\'\n' +
-  '        union all\n' +
-  '        select to_char(start_time, \'YYYY-MM-DD\') as bucket\n' +
-  '        from ap_alert_sub\n' +
-  '        where start_time > now() - interval \'6 day\'\n' +
-  '    ) as table2\n' +
-  '    group by table2.bucket\n' +
-  ') as table3 on table1.collect = table3.bucket\n' +
-  'order by table1.collect desc;'
+export const past7DaysAllAlarm = `select
+table1.collect,
+COALESCE(table3.total,0) total
+from
+(
+SELECT
+    to_char(dt,'yyyy-MM-dd') as collect
+\tfrom generate_series(now() - interval '6 day',now(),interval '1 day') as dt
+) as table1
+left join
+(
+    select
+    table2.bucket,
+    count(1) as total
+    from
+    (
+        select to_char(start_time, 'YYYY-MM-DD') as bucket
+        from ap_alert
+        where start_time > now() - interval '6 day'
+        union all
+        select to_char(start_time, 'YYYY-MM-DD') as bucket
+        from ap_alert_sub
+        where start_time > now() - interval '6 day'
+    ) as table2
+    group by table2.bucket
+) as table3 on table1.collect = table3.bucket
+order by table1.collect desc;`
 
 // 告警处置统计 处置率
 export const handlingAlarm = (timeList = []) => {
@@ -151,4 +153,68 @@ where 1 = 1
 and process_status = '1'
 and start_time between '${timeList[0]}' and '${timeList[1]}'
 group by  apg.id,apg.name;`
+}
+
+// 告警分级统计
+export const gradedStatistics = (timeList = []) => {
+  return `select
+table1.collect,
+COALESCE(table3.level1,0) as level1,
+COALESCE(table3.level2,0) as level2,
+COALESCE(table3.level3,0) as level3,
+COALESCE(table3.level4,0) as level4,
+COALESCE(table3.level5,0) as level5
+from
+(
+    SELECT
+    to_char(dt,'yyyy-MM-dd') as collect
+    from generate_series(${timeList[0]},${timeList[1]},interval '1 day') as dt
+) as table1
+left join(
+    select
+    table2.bucket,
+    sum(case level when '1' then table2.total end) as level1,
+    sum(case level when '2' then table2.total end) as level2,
+    sum(case level when '3' then table2.total end) as level3,
+    sum(case level when '4' then table2.total end) as level4,
+    sum(case level when '5' then table2.total end) as level5
+    from (
+            select
+            to_char(${timeList[0]}, 'YYYY-MM-DD') as bucket,
+            level,
+            count(1)                          as total
+            from ap_alert
+            where start_time between ${timeList[0]} and ${timeList[1]}
+            and level is not null
+            group by bucket, level
+            union all
+            select
+            to_char(start_time, 'YYYY-MM-DD') as bucket,
+            level,
+            count(1)                          as total
+            from ap_alert_sub
+            where start_time between ${timeList[0]} and ${timeList[1]}
+            group by bucket, level
+         ) as table2
+    group by table2.bucket
+) as table3 on table1.collect = table3.bucket
+order by table1.collect asc;`
+}
+
+// 数据源
+export const alarmTotalType = `select id,name from ap_source where enabled = true;`
+
+// 饼图查询
+export const pieDataSql = (id, timeList = []) => {
+  return `select 
+original_json ->> 'coType' as name,
+count(1) as value 
+from ap_alert 
+where 1 = 1
+and original_json ->> 'coType' is not null
+and source_id = '${id}'
+${timeList.length === 2
+    ? `and receive_time between ${timeList[0]} and ${timeList[1]}`
+    : ''}
+group by original_json ->> 'coType'`
 }

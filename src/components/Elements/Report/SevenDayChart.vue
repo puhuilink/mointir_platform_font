@@ -17,28 +17,8 @@ export default {
   name: 'SevenDayChart',
   data () {
     return {
-      myChart: null
-    }
-  },
-  props: {
-    title: {
-      default: '过去7天主告警'
-    },
-    type: {
-      default: 'main'
-    },
-    number: {
-      default: '0'
-    },
-    chartData: {
-      default: () => []
-    }
-  },
-  methods: {
-    load () {
-      console.log('init', this.chartData.map(el => _.get(el, 'collect', '')))
-      this.myChart = echarts.init(this.$refs.chart)
-      const option = {
+      myChart: null,
+      option: {
         color: (this.type === 'main' ? 'rgba(0, 237, 255, 0.7)' : 'rgba(255, 112, 112, 0.7)'),
         xAxis: {
           type: 'category',
@@ -79,7 +59,6 @@ export default {
             type: 'shadow'
           },
           formatter: function (params) {
-            console.log('7', params)
             return `${params[0].name}: ${params[0].value}条`
           }
         },
@@ -115,7 +94,60 @@ export default {
           }
         ]
       }
+    }
+  },
+  props: {
+    title: {
+      default: '过去7天主告警'
+    },
+    type: {
+      default: 'main'
+    },
+    number: {
+      default: '0'
+    },
+    chartData: {
+      type: Array,
+      default: () => [
+        {
+          collect: '2023-10-17',
+          total: '894'
+        },
+        {
+          collect: '2023-10-18',
+          total: '2368'
+        },
+        {
+          collect: '2023-10-19',
+          total: '1988'
+        },
+        {
+          collect: '2023-10-20',
+          total: '1732'
+        },
+        {
+          collect: '2023-10-21',
+          total: '1620'
+        },
+        {
+          collect: '2023-10-22',
+          total: '1623'
+        },
+        {
+          collect: '2023-10-23',
+          total: '2902'
+        }
+      ]
+    }
+  },
+  methods: {
+    load (option) {
+      this.myChart = echarts.init(this.$refs.chart)
       this.myChart.setOption(option)
+      console.log('option', this.option, this.chartData.map(el => _.get(el, 'collect', '')), this.chartData.map(el => Number(_.get(el, 'total', ''))))
+    },
+    setOption () {
+      this.myChart.setOption(this.option)
     }
   },
   mounted () {
