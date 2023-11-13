@@ -101,6 +101,10 @@ const elements = [
   },
   {
     category: 'ELEMENT', type: 'ReportPreview', name: '报表预览', icon: 'title', width: 1920, height: 1080
+  },
+  // 添加海外sdw：1
+  {
+    category: 'ELEMENT', type: 'Hwsdw', name: '海外Sdw', icon: 'title', width: 1920, height: 1080
   }
 ]
 

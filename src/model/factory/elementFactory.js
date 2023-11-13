@@ -19,6 +19,8 @@ import PercentElement from '@/model/element/PercentElement'
 import DepartmentElement from '@/model/element/DepartmentElement'
 import MVMapElement from '@/model/element/MVMapElement'
 import ReportPreviewElement from '@/model/element/ReportPreviewElement'
+// 添加海外sdw：3需要新建一个文件继承
+import HwsdwElement from '@/model/element/HwsdwElement'
 
 export default class ElementFactory {
   static create (type, { widget, element, onlyShow = false }) {
@@ -51,6 +53,9 @@ export default class ElementFactory {
         return new DepartmentElement({ widget, element, onlyShow })
       case 'ReportPreview':
         return new ReportPreviewElement({ widget, element, onlyShow })
+      case 'Hwsdw':
+        // 添加海外sdw：2
+        return new HwsdwElement({ widget, element, onlyShow })
       default:
         return null
     }

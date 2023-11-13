@@ -26,7 +26,7 @@ export const defaultOption = {
     }
   },
   geo: {
-    map: 'china',
+    map: 'worldAndChina',
     label: {
       color: fontColor,
       emphasis: {

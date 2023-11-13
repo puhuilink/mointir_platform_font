@@ -13,7 +13,7 @@ export const asyncRouterMap = [
         {
           path: '/dev-debug',
           // component: () => import('@/views/dev-debug'),
-          component: () => import('@/components/Elements/Report/ReportPreviewElement'),
+          component: () => import('@/components/Elements/AbroadSdwan/index.vue'),
           // component: () => import('@/views/SecurityMonitoring/view/safeTouch'),
           meta: { title: '开发调试页面', keepAlive: true, icon: 'bug' },
           name: 'devTest'

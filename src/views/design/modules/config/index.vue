@@ -51,6 +51,7 @@ export default {
   },
   data: () => ({
     // todo 之后更改命名，使其更加语义化: ['line', 'LineConfig']
+    // 添加海外sdw：0：加载左侧Hwsdw
     templateMapping: new Map([
       ['Bar', 'Bar'],
       ['Lines', 'Lines'],
@@ -80,7 +81,8 @@ export default {
       ['Percent', 'PercentConfig'],
       ['ToLine', 'ToLineConfig'],
       ['Department', 'DepartmentConfig'],
-      ['TimeSelector', 'TimeSelectorConfig']
+      ['TimeSelector', 'TimeSelectorConfig'],
+      ['Hwsdw', 'Hwsdw']
     ])
   }),
   computed: {

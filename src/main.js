@@ -13,6 +13,7 @@ import './components/global.less'
 import Viewer from 'v-viewer'
 import 'viewerjs/dist/viewer.css'
 import dataV from '@jiaminghi/data-view'
+import './core/echartMap'
 Vue.use(Viewer)
 
 Vue.use(dataV)

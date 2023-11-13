@@ -20,6 +20,8 @@ import PercentElement from '~~~/Elements/PercentElement'
 import DepartmentElement from '~~~/Elements/DepartmentElement'
 import MVMapElement from '~~~/Elements/SDMap/MVMapElement'
 import ReportPreviewElement from '~~~/Elements/Report/ReportPreviewElement'
+// 添加海外sdw：5 映射文件
+import HwsdwElement from '~~~/Elements/AbroadSdwan/index'
 
 const ELEMENT_MAPPING = new Map([
   ['AlarmList', 'LatestAlarmElement'],
@@ -36,7 +38,8 @@ const ELEMENT_MAPPING = new Map([
   ['MMp', 'MVMapElement'],
   ['Department', 'DepartmentElement'],
   ['SDMap', 'SDMapElement'],
-  ['ReportPreview', 'ReportPreviewElement']
+  ['ReportPreview', 'ReportPreviewElement'],
+  ['Hwsdw', 'HwsdwElement']
 ])
 
 const ELEMENTS = {
@@ -53,7 +56,8 @@ const ELEMENTS = {
   MVMapElement,
   DepartmentElement,
   SDMapElement,
-  ReportPreviewElement
+  ReportPreviewElement,
+  HwsdwElement
 }
 
 export {
