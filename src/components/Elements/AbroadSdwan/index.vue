@@ -83,7 +83,7 @@
 
         <a-col :span="12" class="row1-2">
           <div class="height-630">
-<!--            <EarthEcharts></EarthEcharts>-->
+            <EarthEcharts></EarthEcharts>
           </div>
         </a-col>
 
@@ -189,8 +189,35 @@ export default {
 }
 </script>
 
-<style scoped lang="less" scoped>
+<style scoped lang="less">
+.tableTop{
+  height: 100%;
+  background-color: #000;
+  .iconTop{
+    img{
+      margin:0 15px;
+      width: 35px;
+      //height: 36px;
+    }
+    padding: 10px 0 0 0;
+    .SpanText{
+      line-height: 100%;
+    }
+  }
+  .rowIcon{
+    .rowIconRow{
+      height: 30px;
+    }
+
+  }
+
+}
+.tableBox{
+  border:10px solid #000;
+}
+//
 .tembox {
+  color:#fff;
   width: 1920px;
   height: 1080px;
   background-color: rgba(24, 24, 24, 1);
@@ -294,6 +321,18 @@ export default {
   margin: 0 10px;
   .row3{
     height: 360px;
+    .row3-1{
+      border-right:5px solid rgba(24, 24, 24, 1);
+    }
+    .row3-2{
+      padding: 0 5px;
+    }
+    .row3-1-1{
+      //margin-left: 10px;
+    }
+    .row3-3{
+      border-left:5px solid rgba(24, 24, 24, 1);
+    }
   }
 }
 </style>
