@@ -45,6 +45,7 @@
     "moment-timezone": "^0.5.33",
     "nprogress": "^0.2.0",
     "perfect-scrollbar": "^1.5.0",
+    "qrcodejs2": "^0.0.2",
     "rxjs": "^6.5.3",
     "string.prototype.replaceall": "^1.0.3",
     "tiptap": "^1.32.1",

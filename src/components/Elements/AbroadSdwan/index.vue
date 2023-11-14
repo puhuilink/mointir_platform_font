@@ -2,7 +2,7 @@
   <div class="tembox">
     <a-row type="flex" class="flexBox">
       <a-col :span="6" :order="1" class="flexBox-col">
-        <img src="./img/u2.png" alt="">
+        <img src="./img/icon2.png" alt="">
         <span>Global视图</span>
       </a-col>
       <a-col :span="6" :order="2" class="flexBox-col2">

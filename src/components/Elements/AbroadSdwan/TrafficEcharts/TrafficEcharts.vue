@@ -9,6 +9,11 @@ import * as echarts from 'echarts'
 
 export default {
   name: 'TrafficEcharts',
+  data () {
+    return {
+      img: require('../img/icon1.png')
+    }
+  },
   mounted () {
     // 获取 DOM 元素
     const barChart = this.$refs.barChart
@@ -18,7 +23,7 @@ export default {
 
     // 图表配置
     const option = {
-      backgroundColor: '#03213D',
+      backgroundColor: '#100101',
       color: ['#5090FF', '#01B3E4'],
       tooltip: {
         trigger: 'axis',
@@ -29,33 +34,43 @@ export default {
         }
       },
       title: {
-        text: 'Traffic',
-        rich: {
-          myIcon: {
-            height: 20,
-            align: 'center',
-            verticalAlign: 'middle',
-            width: 20,
-            backgroundColor: {
-              image: './img/icon1' // 图标图片 URL
+        left: 'left', // 标题位置
+        top: 10, // 调整标题位置
+        text: '{a|}使用富文本标题', // 使用富文本标题
+        verticalAlign: 'bottom',
+        textStyle: {
+          rich: {
+            a: {
+              color: '#fff', // 标题文本颜色
+              width: 20, // 图标宽度
+              height: 20, // 图标高度
+              verticalAlign: 'bottom',
+              backgroundColor: {
+                image: this.img // 图标的背景颜色，这里是图标
+              }
             }
-          }
+          },
+          textBorderColor: '#333', // 标题文本的边框颜色
+          textBorderWidth: 1, // 标题文本的边框宽度,
+          color: '#fff',
+          fontSize: 16
         }
       },
 
       grid: {
         left: '2%',
         right: '5%',
-        bottom: '5%',
-        top: '30px',
+        bottom: '10%',
+        top: '20%',
         containLabel: true
       },
 
       legend: {
         show: true,
-        icon: 'rect',
+        icon: 'circle',
         orient: 'horizontal',
-        left: 'right',
+        left: 'center',
+        bottom: 'bottom',
         itemWidth: 12,
         itemHeight: 12,
         formatter: ['{a|{name}}'].join('\n'),
@@ -69,7 +84,7 @@ export default {
             }
           }
         },
-        data: ['魅力值', '能力值']
+        data: ['rx(Mbps)', 'tx(Mbps)']
       },
       xAxis: {
         type: 'category',
@@ -95,7 +110,14 @@ export default {
           '樱井莉亚',
           '铃原爱蜜莉',
           '铃原爱蜜莉2'
-        ]
+        ],
+        splitLine: {
+          show: true,
+          lineStyle: {
+            color: 'rgba(255, 255, 255, 0.15)'
+            // type: 'dashed', // dotted 虚线
+          }
+        }
       },
       yAxis: {
         type: 'value',
@@ -128,10 +150,10 @@ export default {
       series: [
         {
           type: 'line',
-          // symbol: "none",
-          // showSymbol: false,
+          symbol: 'none',
+          showSymbol: false,
           smooth: true, // 是否曲线
-          name: '魅力值', // 图例对应类别
+          name: 'rx(Mbps)', // 图例对应类别
           data: [4000, 6000, 7000, 2000, 5000, 7000, 9000], // 纵坐标数据
           areaStyle: {
             // 区域颜色
@@ -154,11 +176,11 @@ export default {
               colorStops: [
                 {
                   offset: 0.1,
-                  color: '#5090FF' // 0% 处的颜色
+                  color: 'rgba(21,45,82, 1)' // 0% 处的颜色
                 },
                 {
                   offset: 1,
-                  color: '#1057E500' // 100% 处的颜色
+                  color: 'rgba(21,45,82, 0)' // 100% 处的颜色
                 }
               ]
             }
@@ -167,7 +189,7 @@ export default {
         {
           type: 'line',
           smooth: true,
-          name: '能力值',
+          name: 'tx(Mbps)',
           data: [1000, 4000, 5000, 6000, 3000, 8000, 7000],
           areaStyle: {
             // color: new graphic.LinearGradient(0, 0, 0, 1, [
@@ -189,11 +211,11 @@ export default {
               colorStops: [
                 {
                   offset: 0.1,
-                  color: '#01B3E4' // 0% 处的颜色
+                  color: 'rgba(21,45,82, 1)' // 0% 处的颜色
                 },
                 {
                   offset: 1,
-                  color: '#86DCF300' // 100% 处的颜色
+                  color: 'rgba(21,45,82, 0)' // 100% 处的颜色
                 }
               ]
             }

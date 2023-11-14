@@ -1,10 +1,10 @@
 <template>
   <div class="boxEcharts">
     <div class="tableTop">
-<!--      <div class="iconTop">-->
-<!--        <img src="../img/icon1.jpg" alt="">-->
-<!--        <span class="SpanText">告警信息</span>-->
-<!--      </div>-->
+      <!--      <div class="iconTop">-->
+      <!--        <img src="../img/icon1.jpg" alt="">-->
+      <!--        <span class="SpanText">告警信息</span>-->
+      <!--      </div>-->
 
     </div>
     <div class="echarts-transverse" ref="transverse" style="width: 100%; height: 360px;"></div>
