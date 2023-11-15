@@ -9,18 +9,18 @@
           <div class="row0-1-text">Total</div>
         </div>
         <div class="row0-1">
-          <div class="row0-1-text">Topology</div>
-          <div class="row0-1-text-number">231</div>
+          <div class="row0-1-text">Policy</div>
+          <div class="row0-1-text-number">6672</div>
           <div class="row0-1-text">Total</div>
         </div>
         <div class="row0-1">
-          <div class="row0-1-text">Topology</div>
-          <div class="row0-1-text-number">231</div>
+          <div class="row0-1-text">Host</div>
+          <div class="row0-1-text-number">1231</div>
           <div class="row0-1-text">Total</div>
         </div>
         <div class="row0-1">
-          <div class="row0-1-text">Topology</div>
-          <div class="row0-1-text-number">231</div>
+          <div class="row0-1-text">WAN</div>
+          <div class="row0-1-text-number">38</div>
           <div class="row0-1-text">Total</div>
         </div>
         <div class="row0-2">
@@ -229,14 +229,14 @@ export default {
           color: '#fff'
         }
       },
-      backgroundColor: '#013954',
+      backgroundColor: '#000',
       geo: {
         map: 'worldAndChina',
         zoom: 1.1,
         roam: true,
         layoutCenter: ['50%', '50%'],
         // 如果宽高比大于 1 则宽度为 100，如果小于 1 则高度为 100，保证了不超过 100x100 的区域
-        layoutSize: '100%',
+        layoutSize: '120%',
         itemStyle: {
           borderWidth: 1,
           areaColor: {
@@ -247,26 +247,27 @@ export default {
             colorStops: [
               {
                 offset: 0,
-                color: 'rgba(147, 235, 248, 0)' // 0% 处的颜色
+                color: '#0D629C' // 0% 处的颜色
               },
               {
                 offset: 1,
-                color: 'rgba(147, 235, 248, .2)' // 100% 处的颜色
+                color: '#0D629C' // 100% 处的颜色
               }
             ]
           },
-          shadowColor: 'rgba(128, 217, 248, 1)',
-          shadowOffsetX: -2,
-          shadowOffsetY: 2,
-          shadowBlur: 10,
-          borderColor: 'rgba(147, 235, 248, 1)'
+          shadowColor: 'transparent',
+          shadowOffsetX: -1,
+          shadowOffsetY: 1,
+          shadowBlur: 1,
+          borderColor: '#0D629C',
+          opacity: 1.1
         },
         tooltip: {
           formatter: () => ''
         },
         emphasis: { // 地图高亮
           itemStyle: {
-            color: '#93EBF8'
+            color: '#0D629C'
           }
         }
       },
@@ -282,7 +283,7 @@ export default {
           },
           lineStyle: {
             color: '#F56828',
-            width: 1, // 线条宽度
+            width: 0.2, // 线条宽度
             curveness: 0.3
           },
           tooltip: {
@@ -301,13 +302,15 @@ export default {
           coordinateSystem: 'geo',
           rippleEffect: {
             number: 2,
-            scale: 3,
+            scale: 1.5,
             brushType: 'stroke'
           },
+          symbolSize: 5,
           itemStyle: {
             color: '#F56828'
           },
           tooltip: {
+            show: false,
             formatter ({ data }) {
               return `地点位于：${data.label.name}`
             },
@@ -315,8 +318,8 @@ export default {
           },
           label: {
             show: true,
-            offset: [40, 0],
-            color: '#F56828',
+            offset: [0, 15],
+            color: '#ccc',
             formatter ({ data }) {
               return `${data.label.name}`
             }
