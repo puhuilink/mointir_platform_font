@@ -68,14 +68,14 @@
           <a-row class="row1-1-1">
             <a-col :span="24">
               <div class="height-310">
-                <TrafficEcharts></TrafficEcharts>
+                <TrafficEcharts ref="traffic"></TrafficEcharts>
               </div>
             </a-col>
           </a-row>
           <a-row class="row1-1-2">
             <a-col :span="24">
               <div class="height-310">
-                <TrafficEcharts></TrafficEcharts>
+                <TrafficEcharts ref="overview"></TrafficEcharts>
               </div>
             </a-col>
           </a-row>
@@ -83,7 +83,7 @@
 
         <a-col :span="12" class="row1-2">
           <div class="height-630">
-            <EarthEcharts></EarthEcharts>
+            <!--            <EarthEcharts></EarthEcharts>-->
           </div>
         </a-col>
 
@@ -91,14 +91,14 @@
           <a-row class="row1-3-1">
             <a-col :span="24">
               <p class="height-310">
-                <TrafficEcharts></TrafficEcharts>
+                <TrafficEcharts ref="cpeTraffic"></TrafficEcharts>
               </p>
             </a-col>
           </a-row>
           <a-row class="row1-3-2">
             <a-col :span="24">
               <p class="height-310">
-                <TrafficEcharts></TrafficEcharts>
+                <TrafficEcharts ref="cpeTraffic2"></TrafficEcharts>
               </p>
             </a-col>
           </a-row>
@@ -146,11 +146,13 @@ import TrafficEcharts from './TrafficEcharts/TrafficEcharts'
 import TransverseEcharts from './TrafficEcharts/TransverseEcharts'
 import EarthEcharts from './TrafficEcharts/EarthEcharts'
 import TableEcharts from './TrafficEcharts/TableEcharts'
-
+import { lineData, pieData } from '~~~/Elements/AbroadSdwan/chartConfig'
 export default {
   name: 'AbroadSdwan',
   data () {
     return {
+      pieData,
+      lineData,
       selectedButton: 1,
       customDropdownClass: 'custom-dropdown'
     }
@@ -185,6 +187,13 @@ export default {
     handleChange (value) {
       console.log(value) // { key: "lucy", label: "Lucy (101)" }
     }
+  },
+
+  mounted () {
+    this.$refs.traffic.setOption(lineData)
+    this.$refs.overview.setOption(pieData)
+    this.$refs.cpeTraffic.setOption(lineData)
+    this.$refs.cpeTraffic2.setOption(lineData)
   }
 }
 </script>
